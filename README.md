@@ -217,7 +217,6 @@ Il motore include le principali componenti necessarie a trasformare la RAL nel n
 | Detrazione lavoro dipendente | Formula differenziata per fascia di reddito |
 | Maggiorazione della detrazione | €65 nella fascia prevista dalla normativa |
 | Riduzione del cuneo fiscale | Somma o ulteriore detrazione in funzione del reddito |
-| Trattamento integrativo | Regola implementata nel motore; non produce importi positivi nel dominio ammesso con le assunzioni adottate |
 | Addizionale regionale | Aliquote progressive Regione Lombardia |
 | Addizionale comunale | Comune di Milano, aliquota 0,8% |
 | Esenzione comunale | Reddito imponibile fino a €23.000 |
@@ -397,7 +396,7 @@ Il calculation engine è accompagnato da una suite automatizzata di test.
 La versione validata contiene:
 
 ```text
-90 test automatici
+83 test automatici
 100% statement coverage su calcolatore.py
 100% branch coverage su calcolatore.py
 ```
@@ -417,7 +416,6 @@ La suite comprende test relativi a:
 - detrazione per lavoro dipendente;
 - maggiorazione di €65;
 - riduzione del cuneo fiscale;
-- trattamento integrativo;
 - addizionale regionale Lombardia;
 - addizionale comunale Milano;
 - soglia di esenzione comunale;
@@ -862,7 +860,7 @@ py -m pytest -v
 Risultato atteso sulla versione validata:
 
 ```text
-90 passed
+83 passed
 ```
 
 ## Coverage
