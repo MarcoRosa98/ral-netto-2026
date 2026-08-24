@@ -2,7 +2,7 @@
 
 Funzioni pure, nessuna dipendenza da Streamlit. Ogni funzione applica
 un blocco del flusso: contributi → imponibile → IRPEF lorda → detrazioni
-→ IRPEF netta → benefici → addizionali → netto.
+→ IRPEF netta → addizionali → netto.
 
 Ordine del modulo:
 1. dataclass dei risultati (immutabili: frozen=True + tuple, non liste)
@@ -82,9 +82,7 @@ class RisultatoCalcolo:
     # output
     netto_annuale: Decimal
     netto_mensile: Decimal
-    percentuale_netto: Decimal   # frazione (netto/RAL); nel dominio 20k-100k
-                                 # resta sempre < 1 (il TI, che a RAL basse
-                                 # poteva far superare la RAL, è fuori dominio)
+    percentuale_netto: Decimal   # frazione (netto/RAL)
 
 
 # ─────────────────────────────────────────────────────────────────────────
