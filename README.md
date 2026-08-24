@@ -37,7 +37,7 @@ L'obiettivo del progetto è trasformare queste regole in un motore di calcolo:
 
 Il flusso logico può essere sintetizzato come:
 
-**RAL → contributi → imponibile → IRPEF → detrazioni e benefici → addizionali → netto**
+**RAL → contributi → imponibile → IRPEF → detrazioni e cuneo fiscale → addizionali → netto**
 
 L'interfaccia richiede volutamente soltanto due input:
 
@@ -216,7 +216,7 @@ Il motore include le principali componenti necessarie a trasformare la RAL nel n
 | IRPEF | 23% / 33% / 43% |
 | Detrazione lavoro dipendente | Formula differenziata per fascia di reddito |
 | Maggiorazione della detrazione | €65 nella fascia prevista dalla normativa |
-| Riduzione del cuneo fiscale | Somma o ulteriore detrazione in funzione del reddito |
+| Riduzione del cuneo fiscale | Somma diretta fino a €20.000 di reddito; ulteriore detrazione oltre €20.000 e fino a €40.000 |
 | Addizionale regionale | Aliquote progressive Regione Lombardia |
 | Addizionale comunale | Comune di Milano, aliquota 0,8% |
 | Esenzione comunale | Reddito imponibile fino a €23.000 |
@@ -258,7 +258,8 @@ Lombardia        Milano
  └───────┬───────┘
          │
          ▼
-Eventuali somme riconosciute
+Somma cuneo fiscale
+(se spettante)
          │
          ▼
     NETTO ANNUO
@@ -813,7 +814,7 @@ Non è richiesta alcuna installazione locale.
 ## 1. Clonare la repository
 
 ```bash
-git clone <URL_REPOSITORY>
+git clone https://github.com/MarcoRosa98/ral-netto-2026.git
 cd ral-netto-2026
 ```
 
