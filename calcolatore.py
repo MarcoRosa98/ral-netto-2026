@@ -323,13 +323,13 @@ def calcola_netto(ral: Decimal, mensilita: int) -> RisultatoCalcolo:
     Applica il flusso completo della specifica. Nessuna formula
     fiscale propria: solo composizione delle funzioni del motore.
 
-    Valida il perimetro del prototipo (RAL 20.000-100.000, mensilità
+    Valida il perimetro del modello (RAL 20.000-100.000, mensilità
     12/13/14) e solleva ValueError fuori dominio: la validazione vive
     nel motore, non nella UI, così vale per qualsiasi chiamante.
     """
     if not regole.RAL_MIN <= ral <= regole.RAL_MAX:
         raise ValueError(
-            f"RAL fuori dal perimetro del prototipo: {ral} "
+            f"RAL fuori dal perimetro del modello: {ral} "
             f"(ammesso da {regole.RAL_MIN} a {regole.RAL_MAX})"
         )
     if mensilita not in regole.MENSILITA_AMMESSE:
