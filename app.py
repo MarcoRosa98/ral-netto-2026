@@ -130,7 +130,7 @@ if calcola:
             risultato.addizionale_regionale + risultato.addizionale_comunale
         )
         benefici_totali = (
-            risultato.somma_cuneo + risultato.trattamento_integrativo
+            risultato.somma_cuneo
         )
 
         riepilogo = [
@@ -155,15 +155,7 @@ if calcola:
                 )
             )
 
-        if risultato.trattamento_integrativo > 0:
-            riepilogo.append(
-                (
-                    "Trattamento integrativo",
-                    f"+ {formatta_euro(risultato.trattamento_integrativo)}",
-                )
-            )
-
-        riepilogo.append(
+                riepilogo.append(
             ("Netto annuo", formatta_euro(risultato.netto_annuale))
         )
 
