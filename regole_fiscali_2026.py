@@ -4,7 +4,6 @@ Questo modulo contiene ESCLUSIVAMENTE parametri primitivi (soglie e aliquote).
 Nessuna logica di calcolo, nessun valore matematicamente derivabile:
 - i cumulati IRPEF (6.440, 13.700) sono derivati dagli scaglioni;
 - i denominatori delle detrazioni (13.000, 22.000, 8.000) sono differenze tra soglie;
-- la soglia di capienza del trattamento integrativo (1.880) è 1.955 - 75.
 Tutti questi valori vengono calcolati in calcolatore.py.
 
 Tutti gli importi sono Decimal dichiarati da stringa: Decimal("0.0919") è esatto,
@@ -93,14 +92,6 @@ DETRAZIONE_CUNEO_IMPORTO = Decimal("1000")
 DETRAZIONE_CUNEO_SOGLIA_MIN = Decimal("20000")    # esclusa
 DETRAZIONE_CUNEO_SOGLIA_PIENA = Decimal("32000")  # fino a qui importo pieno
 DETRAZIONE_CUNEO_SOGLIA_MAX = Decimal("40000")    # oltre: 0
-
-# ── Trattamento integrativo ──────────────────────────────────────────────
-# Importo annuo massimo per redditi fino alla soglia, subordinato alla
-# capienza: IRPEF lorda > detrazione lavoro - riduzione.
-# La soglia di capienza effettiva (1.955 - 75 = 1.880) è derivata nel motore.
-TRATTAMENTO_INTEGRATIVO_IMPORTO = Decimal("1200")
-TRATTAMENTO_INTEGRATIVO_SOGLIA_REDDITO = Decimal("15000")
-TRATTAMENTO_INTEGRATIVO_RIDUZIONE_CAPIENZA = Decimal("75")
 
 # ── Addizionale regionale Lombardia ──────────────────────────────────────
 # Scaglioni progressivi. Stessa struttura di SCAGLIONI_IRPEF: la funzione
