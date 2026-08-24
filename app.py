@@ -133,7 +133,7 @@ if calcola:
             risultato.somma_cuneo + risultato.trattamento_integrativo
         )
 
-        riepilogo = [
+                riepilogo = [
             ("RAL", formatta_euro(risultato.ral)),
             (
                 "Contributi previdenziali",
@@ -145,9 +145,27 @@ if calcola:
                 "Addizionali (regionale + comunale)",
                 f"− {formatta_euro(addizionali_totali)}",
             ),
-            ("Somme riconosciute non imponibili", f"+ {formatta_euro(benefici_totali)}"),
-            ("Netto annuo", formatta_euro(risultato.netto_annuale)),
         ]
+
+        if risultato.somma_cuneo > 0:
+            riepilogo.append(
+                (
+                    "Somma cuneo fiscale",
+                    f"+ {formatta_euro(risultato.somma_cuneo)}",
+                )
+            )
+
+        if risultato.trattamento_integrativo > 0:
+            riepilogo.append(
+                (
+                    "Trattamento integrativo",
+                    f"+ {formatta_euro(risultato.trattamento_integrativo)}",
+                )
+            )
+
+        riepilogo.append(
+            ("Netto annuo", formatta_euro(risultato.netto_annuale))
+        )
 
         for voce, importo in riepilogo:
             col_voce, col_importo = st.columns([3, 1])
