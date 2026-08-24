@@ -75,7 +75,6 @@ class RisultatoCalcolo:
     irpef_netta: Decimal
     # benefici
     somma_cuneo: Decimal
-    trattamento_integrativo: Decimal
     # addizionali
     addizionale_regionale: Decimal
     dettaglio_addizionale_regionale: tuple[DettaglioScaglione, ...]
@@ -145,7 +144,7 @@ def calcola_reddito_imponibile(ral: Decimal, contributi_totali: Decimal) -> Deci
 
     Nel perimetro del modello (nessun altro reddito, nessun onere
     deducibile) coincide con il reddito complessivo R utilizzato da
-    detrazioni, cuneo fiscale, trattamento integrativo e addizionali.
+    detrazioni, cuneo fiscale e addizionali.
     """
     return ral - contributi_totali
 
@@ -281,31 +280,6 @@ def calcola_irpef_netta(
     return max(Decimal("0"), irpef_lorda - detrazioni_totali)
 
 
-def calcola_trattamento_integrativo(
-    reddito: Decimal,
-    irpef_lorda: Decimal,
-) -> Decimal:
-    """Trattamento integrativo (perimetro semplificato del modello).
-
-    Spetta per R <= 15.000 se l'IRPEF lorda supera la detrazione
-    lavoro base ridotta di 75 euro (soglia di capienza: 1.955 - 75).
-    Per R > 15.000: sempre zero nel nostro modello, perché tutte le
-    detrazioni che genererebbero il requisito normativo sono escluse
-    dalle assunzioni (vedi README).
-    """
-    if reddito > regole.TRATTAMENTO_INTEGRATIVO_SOGLIA_REDDITO:
-        return Decimal("0")
-
-    soglia_capienza = (
-        regole.DETRAZIONE_LAVORO_IMPORTO_BASE
-        - regole.TRATTAMENTO_INTEGRATIVO_RIDUZIONE_CAPIENZA
-    )
-    if irpef_lorda > soglia_capienza:
-        return regole.TRATTAMENTO_INTEGRATIVO_IMPORTO
-
-    return Decimal("0")
-
-
 def calcola_addizionale_regionale(
     reddito: Decimal,
     irpef_netta: Decimal,
@@ -374,7 +348,6 @@ def calcola_netto(ral: Decimal, mensilita: int) -> RisultatoCalcolo:
     irpef_netta = calcola_irpef_netta(
         irpef_lorda.totale, detrazione_lavoro, cuneo.detrazione
     )
-    trattamento = calcola_trattamento_integrativo(reddito, irpef_lorda.totale)
     add_regionale = calcola_addizionale_regionale(reddito, irpef_netta)
     add_comunale = calcola_addizionale_comunale(reddito, irpef_netta)
 
@@ -385,7 +358,6 @@ def calcola_netto(ral: Decimal, mensilita: int) -> RisultatoCalcolo:
         - add_regionale.totale
         - add_comunale
         + cuneo.somma
-        + trattamento
     )
     netto_mensile = netto_annuale / Decimal(mensilita)
     percentuale_netto = netto_annuale / ral
@@ -403,7 +375,6 @@ def calcola_netto(ral: Decimal, mensilita: int) -> RisultatoCalcolo:
         detrazione_cuneo=cuneo.detrazione,
         irpef_netta=irpef_netta,
         somma_cuneo=cuneo.somma,
-        trattamento_integrativo=trattamento,
         addizionale_regionale=add_regionale.totale,
         dettaglio_addizionale_regionale=add_regionale.dettaglio,
         addizionale_comunale=add_comunale,
