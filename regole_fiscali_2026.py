@@ -28,8 +28,8 @@ from decimal import Decimal, ROUND_HALF_UP
 # dipendente privato full-time, a tempo indeterminato, occupato tutto
 # l'anno a Milano: RAL molto basse (10-15k) sono poco rappresentative
 # di questo profilo e, scendendo, minimali contributivi e contrattuali
-# diventano rilevanti senza poter essere determinati dai soli due input
-# della V1. Meglio restringere il dominio che produrre falsa precisione.
+# diventano rilevanti senza poter essere determinati dai soli due input.
+# Meglio restringere il dominio che produrre falsa precisione.
 RAL_MIN = Decimal("20000")
 RAL_MAX = Decimal("100000")
 MENSILITA_AMMESSE = (12, 13, 14)
