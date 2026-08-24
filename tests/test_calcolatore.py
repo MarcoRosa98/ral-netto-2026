@@ -597,7 +597,7 @@ class TestEndToEnd:
         #   (rapporto 757/13.000 = 0,05823... → troncato 0,0582)
         # detr. cuneo B = 1.000 (20k < 27.243 <= 32k)
         # IRPEF netta = 6.265,89 - 3.044,258 = 3.221,632
-        # TI = 0 | somma cuneo = 0
+        # somma cuneo = 0
         # regionale = 184,50 + 12.243 x 0,0158 = 377,9394
         # comunale = 27.243 x 0,008 = 217,944
         # netto = 30.000 - 2.757 - 3.221,632 - 377,9394 - 217,944
@@ -619,7 +619,7 @@ class TestEndToEnd:
     def test_ral_60000_attiva_contributo_aggiuntivo(self):
         # contributi = 5.514 + 37,76 = 5.551,76 | imponibile = 54.448,24
         # IRPEF lorda = 13.700 + 4.448,24 x 0,43 = 15.612,7432
-        # detr. lavoro = 0 (R > 50.000) | cuneo = 0/0 | TI = 0
+        # detr. lavoro = 0 (R > 50.000) | cuneo = 0/0
         # IRPEF netta = 15.612,7432
         # regionale = 184,50 + 205,40 + 378,40 + 4.448,24 x 0,0173
         #           = 768,30 + 76,954552 = 845,254552
@@ -645,7 +645,6 @@ class TestEndToEnd:
         #   raggiungibile nel dominio) → somma = 18.162 x 0,048 = 871,776
         #   detrazione B = 0 (serve R > 20.000)
         # IRPEF netta = 4.177,26 - 2.810,473 = 1.366,787
-        # TI = 0 (R > 15.000: nel dominio 20k-100k è SEMPRE 0)
         # regionale = 184,50 + 3.162 x 0,0158 = 184,50 + 49,9596 = 234,4596
         # comunale = 0 (18.162 <= 23.000)
         # netto = 20.000 - 1.838 - 1.366,787 - 234,4596 + 871,776
