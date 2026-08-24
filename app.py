@@ -155,7 +155,7 @@ if calcola:
                 )
             )
 
-                riepilogo.append(
+        riepilogo.append(
             ("Netto annuo", formatta_euro(risultato.netto_annuale))
         )
 
