@@ -7,9 +7,9 @@ contributiva o di validazione del dominio. Il flusso è esclusivamente:
 
 Gli unici helper definiti qui sono di PRESENTAZIONE (formato monetario
 e percentuale in stile italiano). Ogni valore mostrato proviene dai
-campi di RisultatoCalcolo; le aggregazioni (addizionali totali,
-benefici totali) sono somme di campi già calcolati dal motore, fatte
-solo per compattare la visualizzazione.
+campi di RisultatoCalcolo; l'aggregazione delle addizionali è una somma
+di campi già calcolati dal motore, utilizzata solo per compattare
+la visualizzazione.
 
 Avvio:  streamlit run app.py
 """
@@ -128,9 +128,6 @@ if calcola:
 
         addizionali_totali = (
             risultato.addizionale_regionale + risultato.addizionale_comunale
-        )
-        benefici_totali = (
-            risultato.somma_cuneo
         )
 
         riepilogo = [
