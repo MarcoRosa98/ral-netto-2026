@@ -8,7 +8,7 @@ Ordine del modulo:
 1. dataclass dei risultati (immutabili: frozen=True + tuple, non liste)
 2. helper: _tronca_rapporto (solo detrazione lavoro), per_output
 3. funzioni di calcolo, nell'ordine del flusso
-4. orchestratore calcola_netto (valida il perimetro del prototipo)
+4. orchestratore calcola_netto (valida il perimetro del modello)
 """
 
 from collections.abc import Sequence
