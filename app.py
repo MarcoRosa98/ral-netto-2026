@@ -145,7 +145,7 @@ if calcola:
                 "Addizionali (regionale + comunale)",
                 f"− {formatta_euro(addizionali_totali)}",
             ),
-            ("Benefici fiscali", f"+ {formatta_euro(benefici_totali)}"),
+            ("Somme riconosciute non imponibili", f"+ {formatta_euro(benefici_totali)}"),
             ("Netto annuo", formatta_euro(risultato.netto_annuale)),
         ]
 
