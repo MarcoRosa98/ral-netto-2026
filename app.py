@@ -133,7 +133,7 @@ if calcola:
             risultato.somma_cuneo + risultato.trattamento_integrativo
         )
 
-                riepilogo = [
+        riepilogo = [
             ("RAL", formatta_euro(risultato.ral)),
             (
                 "Contributi previdenziali",
