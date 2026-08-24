@@ -21,10 +21,8 @@ PRINCIPI DELLA SUITE
    imponibile minimo 18.162) è applicato solo da calcola_netto: i test
    e2e vivono lì dentro. Le funzioni pure implementano le regole su
    tutto il loro spazio, e i test UNITARI le coprono anche sotto il
-   perimetro (fasce cuneo 7,1%/5,3%, trattamento integrativo, detrazione
-   base 1.955, incapienza): regole corrette e protette da regressioni
-   anche se oggi irraggiungibili dal prodotto — se la V2 riaprisse il
-   perimetro, nulla andrebbe riscritto.
+   perimetro (fasce cuneo 7,1%/5,3%,: regole corrette e protette da 
+   regressioni anche se oggi irraggiungibili dal prodotto.
 """
 
 from decimal import Decimal
@@ -43,7 +41,6 @@ from calcolatore import (
     calcola_irpef_netta,
     calcola_netto,
     calcola_reddito_imponibile,
-    calcola_trattamento_integrativo,
     per_output,
 )
 
@@ -472,74 +469,6 @@ class TestIrpefNetta:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# Trattamento integrativo — capienza 1.880 (derivata), soglia 15.000
-# ─────────────────────────────────────────────────────────────────────────
-
-class TestTrattamentoIntegrativo:
-    """Errori intercettati: capienza testata sulla netta invece che
-    sulla lorda; confine > scritto come >= sulla soglia di capienza;
-    soglia reddito con confine sbagliato."""
-
-    def test_sotto_capienza(self):
-        # lorda 1.840 <= 1.880 (= 1.955 - 75, derivata) → 0
-        assert calcola_trattamento_integrativo(D("8000"), D("1840")) == D("0")
-
-    def test_capienza_esatta_non_spetta(self):
-        # lorda ESATTAMENTE 1.880: la norma chiede >, non >=
-        assert calcola_trattamento_integrativo(D("8174"), D("1880")) == D("0")
-
-    def test_appena_sopra_capienza_spetta(self):
-        # lorda 1.880,02 > 1.880 → 1.200
-        assert calcola_trattamento_integrativo(D("8174"), D("1880.02")) == D("1200")
-
-    def test_soglia_reddito_14999(self):
-        # lorda coerente: 14.999 x 0,23 = 3.449,77 > 1.880 → spetta
-        assert calcola_trattamento_integrativo(D("14999"), D("3449.77")) == D("1200")
-
-    def test_soglia_reddito_inclusa(self):
-        # R = 15.000 esatto, lorda 3.450 > 1.880 → spetta
-        assert calcola_trattamento_integrativo(D("15000"), D("3450")) == D("1200")
-
-    def test_oltre_soglia_reddito_zero(self):
-        # regola del MODELLO (non della normativa generale): vedi README
-        assert calcola_trattamento_integrativo(D("15001"), D("3450.23")) == D("0")
-
-
-def test_semplificazione_ti_giustificata_su_tutta_la_fascia_15_28k():
-    """Perché esiste: il modello impone TI = 0 per R > 15.000 sulla base
-    di una PROPRIETÀ, non di una regola normativa: nella fascia
-    15.001-28.000 la sola detrazione da lavoro (unica ammessa dalle
-    assunzioni) non supera mai l'IRPEF lorda, quindi la condizione di
-    incapienza della normativa generale non si verifica mai.
-
-    Questo test DIMOSTRA la proprietà scandagliando tutta la fascia.
-    Errore intercettato: se in futuro cambiassero scaglioni IRPEF o
-    parametri della detrazione rendendo la proprietà falsa, questo
-    test fallirebbe segnalando che la semplificazione non è più
-    giustificata (e va rivisto calcola_trattamento_integrativo).
-
-    Margine minimo verificato: ~350 euro subito sopra 15.000.
-    """
-    margine_minimo = None
-    r = D("15001")
-    while r <= D("28000"):
-        lorda = calcola_irpef_lorda(r).totale
-        detrazione = calcola_detrazione_lavoro(r)
-        margine = lorda - detrazione
-        assert margine > 0, (
-            f"A R={r} la detrazione lavoro ({detrazione}) supera l'IRPEF "
-            f"lorda ({lorda}): la semplificazione TI=0 per R>15.000 "
-            f"non è più giustificata dalle assunzioni del modello"
-        )
-        if margine_minimo is None or margine < margine_minimo:
-            margine_minimo = margine
-        r += D("1")
-
-    # il punto più stretto è subito sopra 15.000: ~350,35 di capienza
-    assert margine_minimo > D("350")
-
-
-# ─────────────────────────────────────────────────────────────────────────
 # Addizionale regionale Lombardia — soglie 15.000/28.000/50.000
 # ─────────────────────────────────────────────────────────────────────────
 
@@ -680,7 +609,6 @@ class TestEndToEnd:
         assert r.detrazione_lavoro == D("2044.2580")
         assert r.detrazione_cuneo == D("1000")
         assert r.irpef_netta == D("3221.632")
-        assert r.trattamento_integrativo == D("0")
         assert r.somma_cuneo == D("0")
         assert r.addizionale_regionale == D("377.9394")
         assert r.addizionale_comunale == D("217.944")
@@ -731,7 +659,6 @@ class TestEndToEnd:
         assert r.somma_cuneo == D("871.776")
         assert r.detrazione_cuneo == D("0")
         assert r.irpef_netta == D("1366.787")
-        assert r.trattamento_integrativo == D("0")
         assert r.addizionale_regionale == D("234.4596")
         assert r.addizionale_comunale == D("0")
         assert r.netto_annuale == D("17432.5294")
@@ -750,10 +677,9 @@ class TestEndToEnd:
         """La discontinuità a imponibile 23.000 attraverso TUTTO il
         motore: superata la soglia di ESENZIONE, lo 0,8% colpisce
         l'intero imponibile (~184 euro di colpo). È il cliff più
-        rilevante rimasto nel dominio 20k-100k (quello del trattamento
-        integrativo a 15.000 è sotto il minimo di prodotto). Errore
-        intercettato: qualunque modifica che 'lisci' artificialmente
-        una discontinuità normativa."""
+        rilevante rimasto nel dominio 20k-100k. 
+        Errore intercettato: qualunque modifica che 'lisci' 
+        artificialmente una discontinuità normativa."""
         prima = calcola_netto(ral_da_imponibile(D("22999")), 12)
         dopo = calcola_netto(ral_da_imponibile(D("23001")), 12)
         assert prima.addizionale_comunale == D("0")
@@ -780,12 +706,12 @@ class TestEndToEnd:
 # espresse in termini di reddito IMPONIBILE (la variabile giusta):
 #   23.000 → esenzione addizionale comunale Milano (0,8% su tutto)
 #   35.000 → perdita del bonus 65 € della detrazione lavoro
+#
 # FUORI dal dominio di prodotto (a RAL 20.000 l'imponibile è già 18.162):
-#   8.174 (capienza TI), 8.500 e 15.000 (fasce cuneo A), 15.000 (perdita
-#   trattamento integrativo). Se la V2 abbassasse RAL_MIN, la soglia
-#   15.000 andrebbe REINSERITA qui.
+#   8.500 e 15.000 → cambi di aliquota della somma cuneo.
+# Se in futuro il limite minimo di RAL venisse abbassato, queste soglie
+# andrebbero rivalutate e, se raggiungibili, reinserite tra le discontinuità attese.
 DISCONTINUITA_ATTESE = [D("23000"), D("35000")]
-
 
 # Il troncamento a 4 cifre dell'art. 13 rende la detrazione lavoro una
 # funzione A GRADINI: scende di IMPORTO x 0,0001 ogni volta che il
